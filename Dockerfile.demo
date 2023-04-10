@@ -1,0 +1,17 @@
+FROM golang:1.20-bullseye AS build
+
+WORKDIR /build
+COPY ./ ./
+
+RUN go mod download
+RUN go build -o ./demoapp ./cmd/demoapp
+
+FROM golang:1.20-bullseye
+
+WORKDIR /app
+COPY --from=build /build/demoapp ./
+
+RUN adduser -u 1001 appuser
+USER 1001
+
+ENTRYPOINT [ "/app/demoapp" ]
