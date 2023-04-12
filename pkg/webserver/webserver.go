@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mrwestbury/frontdoor-ingress/pkg"
 	"github.com/mrwestbury/frontdoor-ingress/pkg/k8s"
 )
 
@@ -41,6 +42,7 @@ func (server *WebServer) health(c *gin.Context) {
 
 func (server *WebServer) ingresses(c *gin.Context) {
 	result := map[string]interface{}{
+		"app_version": pkg.Version,
 		"ingresses":   server.scanner.Ingresses(),
 		"frontdoors":  server.scanner.FrontdoorIds(),
 		"ipAddresses": server.scanner.IpAddresses(),

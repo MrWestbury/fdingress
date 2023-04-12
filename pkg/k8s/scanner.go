@@ -26,6 +26,7 @@ type Scanner struct {
 	ingressStore   cache.Store
 	frontdoorStore cache.Store
 	ipaddressStore cache.Store
+	className      string
 }
 
 func NewScanner() *Scanner {
@@ -45,8 +46,9 @@ func NewScanner() *Scanner {
 	}
 
 	scanner := &Scanner{
-		client:   clientset,
-		fdclient: fdClientset,
+		client:    clientset,
+		fdclient:  fdClientset,
+		className: "fdingress",
 	}
 
 	fd, err := os.Open("/var/run/secrets/kubernetes.io/serviceaccount/namespace")
@@ -71,6 +73,9 @@ func (scanner *Scanner) Ingresses() []*v1alpha1.Ingress {
 	result := make([]*v1alpha1.Ingress, 0)
 	for _, ingressG := range ingresses {
 		ingress := ingressG.(*v1.Ingress)
+		if *ingress.Spec.IngressClassName != "" && *ingress.Spec.IngressClassName != scanner.className {
+			continue
+		}
 
 		for _, rule := range ingress.Spec.Rules {
 			for _, path := range rule.IngressRuleValue.HTTP.Paths {

@@ -8,7 +8,6 @@
   "remoteEnv": {
       "SYNC_LOCALHOST_KUBECONFIG": "true"
   },
-  "postCreateCommand": "cd /workspaces/frontdoor-ingress/.devcontainer && chmod +x setup.sh && ./setup.sh",
   "customizations": {
     "vscode": {
       "settings": {
@@ -23,6 +22,14 @@
         "golang.go"
       ]
     }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "azure-cli": "latest",
+    "kubectl-helm-minikube": {
+      "version": "latest",
+      "helm": "latest"
+  }
   },
   "remoteUser": "vscode"
 }
