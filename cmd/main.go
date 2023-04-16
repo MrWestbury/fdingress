@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/mrwestbury/frontdoor-ingress/pkg"
 	"github.com/mrwestbury/frontdoor-ingress/pkg/k8s"
@@ -9,7 +10,11 @@ import (
 )
 
 func main() {
-	scanner := k8s.NewScanner()
+	envClassName := os.Getenv("FDINGRESS_CLASSNAME")
+	if envClassName == "" {
+		envClassName = "fdingress"
+	}
+	scanner := k8s.NewScanner(envClassName)
 	scanner.Start()
 	web := webserver.NewWebServer(scanner)
 

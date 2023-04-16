@@ -29,7 +29,7 @@ type Scanner struct {
 	className      string
 }
 
-func NewScanner() *Scanner {
+func NewScanner(className string) *Scanner {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		panic(err.Error())
@@ -48,7 +48,7 @@ func NewScanner() *Scanner {
 	scanner := &Scanner{
 		client:    clientset,
 		fdclient:  fdClientset,
-		className: "fdingress",
+		className: className,
 	}
 
 	fd, err := os.Open("/var/run/secrets/kubernetes.io/serviceaccount/namespace")
